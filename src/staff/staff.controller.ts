@@ -1,5 +1,6 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { StaffService } from "./staff.service";
+import { StaffDto } from "./staff.dto";
 
 @Controller('staff')
 export class StaffController {
@@ -27,17 +28,32 @@ export class StaffController {
   }
 
   @Post('/employee/new')
-  async addEmployee(@Body() body: any) {
+  async addEmployee(@Body() body: StaffDto) {
     return await this.staffService.addEmployee(body);
   }
 
-  @Post('/employee/new')
-  async addManager(@Body() body: any) {
+  @Post('/manager/new')
+  async addManager(@Body() body: StaffDto) {
     return await this.staffService.addManager(body);
   }
 
-  @Post('/employee/new')
-  async addSales(@Body() body: any) {
+  @Post('/sales/new')
+  async addSales(@Body() body: StaffDto) {
     return await this.staffService.addSales(body);
+  }
+
+  @Get('/employee/:id')
+  async findEmployeeById(@Param('id') id: number) {
+    return await this.staffService.getEmployeeById(id);
+  }
+
+  @Get('/manager/:id')
+  async findManagerById(@Param('id') id: number) {
+    return await this.staffService.getManagerById(id);
+  }
+
+  @Get('/sales/:id')
+  async findSalesById(@Param('id') id: number) {
+    return await this.staffService.getSalesById(id);
   }
 }
