@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Query
+} from '@nestjs/common';
 import { StaffService } from "./staff.service";
 import { StaffDto } from "./staff.dto";
 
@@ -55,5 +63,72 @@ export class StaffController {
   @Get('/sales/:id')
   async findSalesById(@Param('id') id: number) {
     return await this.staffService.getSalesById(id);
+  }
+
+  @Delete('/employee/:id')
+  async removeEmployeeById(@Param('id') id: number) {
+    return await this.staffService.removeEmployee(id);
+  }
+
+  @Delete('/manager/:id')
+  async removeManagerById(@Param('id') id: number) {
+    return await this.staffService.removeManager(id);
+  }
+
+  @Delete('/sales/:id')
+  async removeSalesById(@Param('id') id: number) {
+    return await this.staffService.removeSales(id);
+  }
+
+  @Get('/salary/employee/:id')
+  async calculateEmployeeSalary(@Param('id') id: number, @Query(
+    'date') date: string) {
+    if (!date) {
+      return {
+        salary: await this.staffService.calculateEmployeeSalary(id, new Date())
+      };
+    }
+    return {
+      salary: await this.staffService.calculateEmployeeSalary(id,
+        new Date(date))
+    };
+  }
+
+  @Get('/salary/manager/:id')
+  async calculateManagerSalary(@Param('id') id: number, @Query(
+    'date') date: string) {
+    if (!date) {
+      return {
+        salary: await this.staffService.calculateManagerSalary(id, new Date())
+      };
+    }
+    return {
+      salary: await this.staffService.calculateManagerSalary(id, new Date(date))
+    };
+  }
+
+  @Get('/salary/sales/:id')
+  async calculateSalesSalary(@Param('id') id: number, @Query(
+    'date') date: string) {
+    if (!date) {
+      return {
+        salary: await this.staffService.calculateSalesSalary(id, new Date())
+      };
+    }
+    return {
+      salary: await this.staffService.calculateSalesSalary(id, new Date(date))
+    };
+  }
+
+  @Get('/salary/all')
+  async calculateAllSalaries(@Query('data') date: string) {
+    if (!date) {
+      return {
+        salary: await this.staffService.calculateSumSalaries(new Date())
+      };
+    }
+    return {
+      salary: await this.staffService.calculateSumSalaries(new Date(date))
+    };
   }
 }
